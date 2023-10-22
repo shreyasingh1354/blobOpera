@@ -1,7 +1,5 @@
 import cv2
-import mido
 import numpy as np
-from mido import MidiFile, MidiTrack, Message
 import mediapipe as mp
 from time import sleep
 import pyautogui as pg
@@ -11,11 +9,6 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from webdriver_manager.chrome import ChromeDriverManager
-
-min_note = 60  
-max_note = 80  
-min_velocity = 30  
-max_velocity = 100  
 
 cap = cv2.VideoCapture(0)
 
@@ -69,9 +62,6 @@ while True:
                 
                 pg.leftClick()
                 pg.moveTo(cursor_x,cursor_y)
-
-            
-            pg.moveTo(cursor_x,cursor_y)
     
     cv2.imshow('Hand Motion', frame)
     
