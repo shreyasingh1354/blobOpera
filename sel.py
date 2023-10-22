@@ -28,14 +28,27 @@ driver = webdriver.Chrome(
     service=Service(ChromeDriverManager().install()), options=options)
 
 driver.get(r"https://artsandculture.google.com/experiment/blob-opera/AAHWrq360NcGbw?hl=en")
+pg.press('f11') 
 sleep(5)
 driver.find_element(by=By.CLASS_NAME, value="snByac").click()
-
 sleep(5)
 height = driver.execute_script("return document.body.scrollHeight")
 pg.moveTo(x=976, y=797)
 sleep(5)
 pg.dragTo(x=976, y=223, duration=3)
+pg.moveTo(x=1805, y=1033)
+pg.click()
+sleep(2)
+
+def returngrid(x):
+    if(x>=0 and x<=775):
+        return 1
+    elif(x>775 and x<=916):
+        return 2
+    elif(x>916 and x<=1158):
+        return 3
+    elif(x>1158 and x<=1920):
+        return 4
 
 while True:
     ret, frame = cap.read()
@@ -56,12 +69,16 @@ while True:
             thumb_tip = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
             index_finger_tip = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
             distance = np.sqrt((thumb_tip.x - index_finger_tip.x) ** 2 + (thumb_tip.y - index_finger_tip.y) ** 2)
-
-            
-            while distance < 0.05:  
-                
-                pg.leftClick()
-                pg.moveTo(cursor_x,cursor_y)
+            grid = returngrid(cursor_x)
+            if(grid==1):
+                cursor_x=661
+            elif(grid==2):
+                cursor_x=881
+            elif(grid==3):
+                cursor_x=1083
+            elif(grid==4):
+                cursor_x=1275
+            pg.dragTo(cursor_x, cursor_y,duration=1.5)
     
     cv2.imshow('Hand Motion', frame)
     
