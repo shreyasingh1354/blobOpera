@@ -42,13 +42,13 @@ sleep(2)
 
 def returngrid(x):
     if(x>=0 and x<=775):
-        return 1
+        return 661
     elif(x>775 and x<=916):
-        return 2
+        return 881
     elif(x>916 and x<=1158):
-        return 3
+        return 1083
     elif(x>1158 and x<=1920):
-        return 4
+        return 1275
 
 while True:
     ret, frame = cap.read()
@@ -69,16 +69,10 @@ while True:
             thumb_tip = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
             index_finger_tip = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
             distance = np.sqrt((thumb_tip.x - index_finger_tip.x) ** 2 + (thumb_tip.y - index_finger_tip.y) ** 2)
-            grid = returngrid(cursor_x)
-            if(grid==1):
-                cursor_x=661
-            elif(grid==2):
-                cursor_x=881
-            elif(grid==3):
-                cursor_x=1083
-            elif(grid==4):
-                cursor_x=1275
-            pg.dragTo(cursor_x, cursor_y,duration=1.5)
+            cursor_x = returngrid(cursor_x)
+            moveTo = (cursor_x, cursor_y)
+            if(cursor_x==661 or cursor_x==881 or cursor_x==1083 or cursor_x==1275):
+                pg.dragTo(cursor_x, cursor_y,duration=1.5)
     
     cv2.imshow('Hand Motion', frame)
     
