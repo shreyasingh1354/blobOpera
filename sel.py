@@ -17,7 +17,6 @@ cap.set(4, 1080)
 
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands()
-
 options = Options()
 options.add_argument("start-maximized")
 options.add_argument("--disable-blink-features=AutomationControlled")
@@ -31,10 +30,10 @@ driver.get(r"https://artsandculture.google.com/experiment/blob-opera/AAHWrq360Nc
 pg.press('f11') 
 sleep(5)
 driver.find_element(by=By.CLASS_NAME, value="snByac").click()
-sleep(5)
+sleep(2)
 height = driver.execute_script("return document.body.scrollHeight")
 pg.moveTo(x=976, y=797)
-sleep(5)
+sleep(2)
 pg.dragTo(x=976, y=223, duration=3)
 pg.moveTo(x=1805, y=1033)
 pg.click()
@@ -64,16 +63,14 @@ while True:
             screen_width, screen_height = pg.size()
             cursor_x = int(hand_x * screen_width / frame.shape[1])
             cursor_y = int(hand_y * screen_height / frame.shape[0])
-            
-            
-            thumb_tip = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
-            index_finger_tip = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
-            distance = np.sqrt((thumb_tip.x - index_finger_tip.x) ** 2 + (thumb_tip.y - index_finger_tip.y) ** 2)
+
+            if(cursor_y<300):
+                pg.mouseUp() 
+            else:
+                pg.mouseDown() 
             cursor_x = returngrid(cursor_x)
-            moveTo = (cursor_x, cursor_y)
-            if(cursor_x==661 or cursor_x==881 or cursor_x==1083 or cursor_x==1275):
-                pg.dragTo(cursor_x, cursor_y,duration=1.5)
-    
+            pg.moveTo(cursor_x, cursor_y)
+            
     cv2.imshow('Hand Motion', frame)
     
     
@@ -83,7 +80,3 @@ while True:
 cap.release()
 cv2.destroyAllWindows()
 driver.quit()
-# GRID 1: 0 775
-# GRID 2: 775 916
-# GRID 3: 916 1158
-# GRID 4: 1158 1920
