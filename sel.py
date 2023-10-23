@@ -1,7 +1,5 @@
 import cv2
-import mido
 import numpy as np
-from mido import MidiFile, MidiTrack, Message
 import mediapipe as mp
 from time import sleep
 import pyautogui as pg
@@ -12,11 +10,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from webdriver_manager.chrome import ChromeDriverManager
 
-min_note = 60  
-max_note = 80  
-min_velocity = 30  
-max_velocity = 100  
-
 cap = cv2.VideoCapture(0)
 
 cap.set(3, 1920)  
@@ -24,7 +17,6 @@ cap.set(4, 1080)
 
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands()
-
 options = Options()
 options.add_argument("start-maximized")
 options.add_argument("--disable-blink-features=AutomationControlled")
@@ -35,14 +27,27 @@ driver = webdriver.Chrome(
     service=Service(ChromeDriverManager().install()), options=options)
 
 driver.get(r"https://artsandculture.google.com/experiment/blob-opera/AAHWrq360NcGbw?hl=en")
+pg.press('f11') 
 sleep(5)
 driver.find_element(by=By.CLASS_NAME, value="snByac").click()
-
-sleep(5)
+sleep(2)
 height = driver.execute_script("return document.body.scrollHeight")
 pg.moveTo(x=976, y=797)
-sleep(5)
+sleep(2)
 pg.dragTo(x=976, y=223, duration=3)
+pg.moveTo(x=1805, y=1033)
+pg.click()
+sleep(2)
+
+def returngrid(x):
+    if(x>=0 and x<=775):
+        return 661
+    elif(x>775 and x<=916):
+        return 881
+    elif(x>916 and x<=1158):
+        return 1083
+    elif(x>1158 and x<=1920):
+        return 1275
 
 while True:
     ret, frame = cap.read()
@@ -58,21 +63,14 @@ while True:
             screen_width, screen_height = pg.size()
             cursor_x = int(hand_x * screen_width / frame.shape[1])
             cursor_y = int(hand_y * screen_height / frame.shape[0])
-            
-            
-            thumb_tip = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP]
-            index_finger_tip = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
-            distance = np.sqrt((thumb_tip.x - index_finger_tip.x) ** 2 + (thumb_tip.y - index_finger_tip.y) ** 2)
 
+            if(cursor_y<300):
+                pg.mouseUp() 
+            else:
+                pg.mouseDown() 
+            cursor_x = returngrid(cursor_x)
+            pg.moveTo(cursor_x, cursor_y)
             
-            while distance < 0.05:  
-                
-                pg.leftClick()
-                pg.moveTo(cursor_x,cursor_y)
-
-            
-            pg.moveTo(cursor_x,cursor_y)
-    
     cv2.imshow('Hand Motion', frame)
     
     
@@ -82,7 +80,3 @@ while True:
 cap.release()
 cv2.destroyAllWindows()
 driver.quit()
-# GRID 1: 0 775
-# GRID 2: 775 916
-# GRID 3: 916 1158
-# GRID 4: 1158 1920
