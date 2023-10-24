@@ -74,7 +74,7 @@ while True:
             cursor_x = int(hand_x * screen_width / frame.shape[1])
             cursor_y = int(hand_y * screen_height / frame.shape[0])
 
-            if(cursor_y<300):
+            if(cursor_y>990):
                 pg.mouseUp() 
             else:
                 pg.mouseDown() 
