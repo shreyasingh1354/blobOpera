@@ -39,14 +39,24 @@ pg.moveTo(x=1805, y=1033)
 pg.click()
 sleep(2)
 
+# def returngrid(x):
+#     if(x>=0 and x<=775):
+#         return 661
+#     elif(x>775 and x<=916):
+#         return 881
+#     elif(x>916 and x<=1158):
+#         return 1083
+#     elif(x>1158 and x<=1920):
+#         return 1275
+
 def returngrid(x):
-    if(x>=0 and x<=775):
+    if(x>=0 and x<=480):
         return 661
-    elif(x>775 and x<=916):
+    elif(x>480 and x<=960):
         return 881
-    elif(x>916 and x<=1158):
+    elif(x>960 and x<=1440):
         return 1083
-    elif(x>1158 and x<=1920):
+    elif(x>1440 and x<=1920):
         return 1275
 
 while True:
@@ -64,7 +74,7 @@ while True:
             cursor_x = int(hand_x * screen_width / frame.shape[1])
             cursor_y = int(hand_y * screen_height / frame.shape[0])
 
-            if(cursor_y<300):
+            if(cursor_y>990):
                 pg.mouseUp() 
             else:
                 pg.mouseDown() 
